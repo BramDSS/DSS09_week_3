@@ -1,0 +1,73 @@
+---
+title: "Presentation with plotly"
+author: "Bram van Dam"
+date: "July 25, 2017"
+output: 
+  ioslides_presentation: 
+    keep_md: yes
+---
+
+<style type="text/css">
+body, td {
+   font-size: 14px;
+}
+code.r{
+  font-size: 10px;
+}
+pre {
+  font-size: 14px
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Overview
+
+This is an R Markdown presentation for the course "Developing data products", which is part of the Data science specialization on Coursera (https://www.coursera.org/specializations/jhu-data-science/).
+
+The next three slides contain:  
+- Some background of the plot  
+- The plotly plot  
+- The code for the plot  
+
+From my own testing, the plot does show up correctly in Microsoft Edge or Internet Explorer; the plot is not evaluated well with Firefox. So please use another browser if the plot doesn't show up.
+
+## Background of plot
+
+A dataset which can be found in any R installation is used. See http://stat.ethz.ch/R-manual/R-patched/library/datasets/html/state.html for more background on the data set.
+
+On the following slide, the life expectancy (in years) is plotted against income per capita and the percentage of high-school graduates. Markers are colored by the murder rate per 100,000 population.  
+
+By no way is any connection suggested, it just shows what kind of plots can be made with the plotly package in R.
+
+## Plotly plot
+
+```{r plot, ref.label = 'code', echo = FALSE, message = FALSE, warning = FALSE}
+
+```
+
+
+## R Code for the plot
+
+```{r code, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE}
+library(plotly); library(datasets)
+sdf <- as.data.frame(state.x77)
+
+mstyle = list(color = ~`Murder`,
+              colorscale = c('#FFE1A1', '#683531'),
+              showscale = TRUE,
+              colorbar = list(x = 0.8, y = 0.5, yanchor = "middle",
+                              title = "Murder rate per\n 100,000 population"))
+plot_ly(sdf, x = ~`Income`, y = ~`HS Grad`, z = ~`Life Exp`,
+        type = "scatter3d",
+        showlegend = FALSE,
+        mode = "markers",
+        marker = mstyle) %>%
+    layout(title = "Life expectancy to income and high-school graduation",
+           scene = list(xaxis = list(title = 'Income (per capita)'),
+                        yaxis = list(title = 'High-school Graduates (%)'),
+                        zaxis = list(title = 'Life expectancy (years)'))
+           )
+```
